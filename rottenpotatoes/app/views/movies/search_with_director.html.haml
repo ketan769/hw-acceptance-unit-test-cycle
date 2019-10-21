@@ -1,0 +1,17 @@
+%table.table-striped.col-md-10
+  %thead
+    %tr
+      %th Movie Title
+      %th Directed By
+      %th Rating
+      %th Release Date
+  %tbody
+    - @movie.each do |movie|
+      %tr
+        %td= movie.title 
+        %td=movie.director
+        %td= movie.rating
+        %td= movie.release_date
+
+        
+= link_to 'Back', movie_path 

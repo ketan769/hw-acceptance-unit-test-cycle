@@ -1,9 +1,19 @@
 class MoviesController < ApplicationController
   
   def movie_params
-    params.require(:movie).permit(:title, :rating, :description, :release_date)
+    params.require(:movie).permit(:title, :rating, :description, :release_date,:director)#added the director field 
   end
 
+  def search_with_director #gets called when find movie by director is pressed 
+    movie=Movie.find(params[:id])
+    if movie.director?#movie director exists "Happy Path" the movies with similar directors are populated 
+      @movie=Movie.find_by_director(movie.director)
+    else# Sad path get routed to the main page with message 
+      flash[:warning]="'#{movie.title}' has no director info"
+      redirect_to '/movies'
+    end
+  end
+  
   def show
     id = params[:id] # retrieve movie ID from URI route
     @movie = Movie.find(id) # look up movie by unique ID
@@ -42,7 +52,9 @@ class MoviesController < ApplicationController
     flash[:notice] = "#{@movie.title} was successfully created."
     redirect_to movies_path
   end
-
+  
+  
+  
   def edit
     @movie = Movie.find params[:id]
   end
